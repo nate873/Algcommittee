@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/Landingpage';
+import Actions from './pages/Actions';
+import FAQ from './pages/FAQ';
+import MeetingNotes from './pages/MeetingNotes';
+import Contact from './pages/Contact';
+import Login from './pages/Login';
+import RequestAccess from './pages/RequestAccess';
+import AdminPortal from './pages/AdminPortal';
+import SetPassword from './pages/SetPassword';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Public — always visible */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/request-access" element={<RequestAccess />} />
+        <Route path="/set-password" element={<SetPassword />} />
+
+        {/* Protected — requires login */}
+        <Route path="/actions" element={<ProtectedRoute><Actions /></ProtectedRoute>} />
+        <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
+        <Route path="/meeting-notes" element={<ProtectedRoute><MeetingNotes /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+
+        {/* Admin only */}
+        <Route path="/admin" element={<AdminRoute><AdminPortal /></AdminRoute>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -16,18 +16,33 @@ export default function SetPassword() {
     const tokenHash = params.get('token_hash');
     const type = params.get('type');
 
-    if (tokenHash && (type === 'invite' || type === 'recovery')) {
+    if (tokenHash) {
       supabase.auth.verifyOtp({
         token_hash: tokenHash,
-        type: type === 'invite' ? 'invite' : 'recovery',
-      }).then(({ error }) => {
+        type: 'invite',
+      }).then(({ data, error }) => {
         if (error) {
+          console.error('verifyOtp error:', error);
           setError('Invalid or expired invite link. Please request a new one.');
+          setReady(true);
+          return;
         }
-        setReady(true);
+        if (data?.session) {
+          supabase.auth.setSession({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token,
+          }).then(({ error: sessionError }) => {
+            if (sessionError) {
+              setError('Could not establish session. Please request a new invite.');
+            }
+            setReady(true);
+          });
+        } else {
+          setError('No session returned. Please request a new invite.');
+          setReady(true);
+        }
       });
     } else {
-      // Check if already signed in (e.g. password recovery flow)
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
           setReady(true);

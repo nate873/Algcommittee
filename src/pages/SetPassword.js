@@ -14,7 +14,6 @@ export default function SetPassword() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tokenHash = params.get('token_hash');
-    const type = params.get('type');
 
     if (tokenHash) {
       supabase.auth.verifyOtp({

@@ -12,16 +12,14 @@ export default function SetPassword() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Handle invite link tokens from URL hash
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const refreshToken = hashParams.get('refresh_token');
-    const type = hashParams.get('type');
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get('token_hash');
+    const type = params.get('type');
 
-    if (accessToken && type === 'invite') {
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken || '',
+    if (tokenHash && (type === 'invite' || type === 'recovery')) {
+      supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: type === 'invite' ? 'invite' : 'recovery',
       }).then(({ error }) => {
         if (error) {
           setError('Invalid or expired invite link. Please request a new one.');
@@ -29,7 +27,7 @@ export default function SetPassword() {
         setReady(true);
       });
     } else {
-      // Check if already signed in
+      // Check if already signed in (e.g. password recovery flow)
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
           setReady(true);

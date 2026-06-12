@@ -321,7 +321,6 @@ export default function Header() {
 
         {/* Nav links */}
         <ul className="alg-nav__center">
-          <li><a href="/meeting-notes">Meeting Notes</a></li>
           <li><a href="/faq">FAQ</a></li>
           <li><a href="/actions">Actions</a></li>
           <li><a href="/contact">Contact</a></li>

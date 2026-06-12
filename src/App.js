@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/Landingpage';
 import Actions from './pages/Actions';
 import FAQ from './pages/FAQ';
-import MeetingNotes from './pages/MeetingNotes';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import RequestAccess from './pages/RequestAccess';
@@ -24,7 +23,6 @@ function App() {
         {/* Protected — requires login */}
         <Route path="/actions" element={<ProtectedRoute><Actions /></ProtectedRoute>} />
         <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
-        <Route path="/meeting-notes" element={<ProtectedRoute><MeetingNotes /></ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
 
         {/* Admin only */}

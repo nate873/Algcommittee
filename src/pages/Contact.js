@@ -5,10 +5,10 @@ import Footer from '../components/Footer';
 
 const INQUIRY_TYPES = [
   'General Inquiry',
-  'Loan Process',
-  'Credit Policy',
+  'Loan Restructuring',
+  'Claim Status',
+  'Distributions & Recovery',
   'Membership',
-  'Meeting Notes',
   'Portal Access',
   'Other',
 ];

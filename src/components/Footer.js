@@ -131,7 +131,7 @@ export default function Footer() {
         </div>
 
         <div className="alg-footer__bottom">
-          <span>© {new Date().getFullYear()} Allstate Lending Group. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Allstate Lending Creditor Committee. All rights reserved.</span>
           <span>ALGcommittee.com &nbsp;|&nbsp; Confidential — Authorized Members Only</span>
         </div>
       </footer>

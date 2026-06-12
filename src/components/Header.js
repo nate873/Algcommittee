@@ -6,7 +6,9 @@ export default function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [showCaseInfo, setShowCaseInfo] = useState(false);
   const dropdownRef = useRef(null);
+  const caseInfoRef = useRef(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -23,9 +25,22 @@ export default function Header() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowProfile(false);
       }
+      if (caseInfoRef.current && !caseInfoRef.current.contains(e.target)) {
+        setShowCaseInfo(false);
+      }
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setShowProfile(false);
+        setShowCaseInfo(false);
+      }
     };
     document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('keydown', onKey);
+    };
   }, []);
 
   const handleSignOut = async () => {
@@ -163,6 +178,95 @@ export default function Header() {
         }
         .alg-nav__admin::after { display: none !important; }
 
+        /* ── Case Info dropdown ── */
+        .alg-caseinfo {
+          position: relative;
+        }
+        .alg-caseinfo__trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-family: 'Outfit', sans-serif;
+          color: rgba(255,255,255,0.65);
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.2px;
+          padding: 0;
+          transition: color 0.2s;
+          position: relative;
+        }
+        .alg-caseinfo__trigger::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: #C9A84C;
+          transform: scaleX(0);
+          transition: transform 0.2s;
+        }
+        .alg-caseinfo__trigger:hover,
+        .alg-caseinfo.open .alg-caseinfo__trigger {
+          color: #fff;
+        }
+        .alg-caseinfo__trigger:hover::after,
+        .alg-caseinfo.open .alg-caseinfo__trigger::after {
+          transform: scaleX(1);
+        }
+        .alg-caseinfo__caret {
+          font-size: 8px;
+          color: #C9A84C;
+          transition: transform 0.18s ease;
+        }
+        .alg-caseinfo.open .alg-caseinfo__caret {
+          transform: rotate(180deg);
+        }
+
+        .alg-caseinfo__menu {
+          position: absolute;
+          top: calc(100% + 22px);
+          left: 50%;
+          transform: translateX(-50%);
+          background: #fff;
+          border: 1px solid #DDD9CE;
+          border-radius: 10px;
+          width: 230px;
+          box-shadow: 0 12px 40px rgba(11,31,58,0.18);
+          overflow: hidden;
+          animation: dropIn 0.18s ease;
+          z-index: 200;
+          padding: 8px;
+        }
+        /* invisible hover bridge so the menu doesn't close crossing the gap */
+        .alg-caseinfo__menu::before {
+          content: '';
+          position: absolute;
+          top: -22px;
+          left: 0;
+          right: 0;
+          height: 22px;
+        }
+        .alg-caseinfo__menu a {
+          display: block;
+          padding: 10px 14px;
+          border-radius: 6px;
+          font-family: 'Outfit', sans-serif;
+          font-size: 13.5px;
+          font-weight: 500;
+          color: #0B1F3A !important;
+          text-decoration: none;
+          transition: background 0.15s;
+        }
+        .alg-caseinfo__menu a::after { display: none !important; }
+        .alg-caseinfo__menu a:hover {
+          background: #F5F4F0;
+          color: #0B1F3A !important;
+        }
+
         /* ── Right side ── */
         .alg-nav__right {
           display: flex;
@@ -233,6 +337,13 @@ export default function Header() {
         @keyframes dropIn {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        .alg-caseinfo__menu {
+          animation-name: dropInCentered;
+        }
+        @keyframes dropInCentered {
+          from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         .alg-profile__header {
           background: #0B1F3A;
@@ -321,6 +432,33 @@ export default function Header() {
 
         {/* Nav links */}
         <ul className="alg-nav__center">
+          <li>
+            <div
+              className={`alg-caseinfo ${showCaseInfo ? 'open' : ''}`}
+              ref={caseInfoRef}
+              onMouseEnter={() => setShowCaseInfo(true)}
+              onMouseLeave={() => setShowCaseInfo(false)}
+            >
+              <button
+                type="button"
+                className="alg-caseinfo__trigger"
+                aria-haspopup="true"
+                aria-expanded={showCaseInfo}
+                onClick={() => setShowCaseInfo((p) => !p)}
+              >
+                Case Info <span className="alg-caseinfo__caret">▼</span>
+              </button>
+
+              {showCaseInfo && (
+                <div className="alg-caseinfo__menu">
+                  <a href="/case-information">Case Information</a>
+                  <a href="/proof-of-claim">Proof of Claim</a>
+                  <a href="/useful-links">Useful Links</a>
+                  <a href="/professionals">Case Professionals</a>
+                </div>
+              )}
+            </div>
+          </li>
           <li><a href="/faq">FAQ</a></li>
           <li><a href="/actions">Actions</a></li>
           <li><a href="/contact">Contact</a></li>

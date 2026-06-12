@@ -9,6 +9,7 @@ export default function Header() {
   const [showCaseInfo, setShowCaseInfo] = useState(false);
   const dropdownRef = useRef(null);
   const caseInfoRef = useRef(null);
+  const closeTimer = useRef(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -40,8 +41,20 @@ export default function Header() {
     return () => {
       document.removeEventListener('mousedown', handler);
       document.removeEventListener('keydown', onKey);
+      if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, []);
+
+  // Hover intent: open immediately, close after a short delay so the
+  // menu survives the mouse travelling from the trigger down into it.
+  const openCaseInfo = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setShowCaseInfo(true);
+  };
+  const scheduleCloseCaseInfo = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setShowCaseInfo(false), 200);
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -226,29 +239,32 @@ export default function Header() {
           transform: rotate(180deg);
         }
 
-        .alg-caseinfo__menu {
+        /*
+          Structure fix: .alg-caseinfo__pop is the positioned wrapper.
+          Its padding-top spans the visual gap between the trigger and
+          the white card, so the cursor never leaves the hover area
+          while travelling down into the menu.
+        */
+        .alg-caseinfo__pop {
           position: absolute;
-          top: calc(100% + 22px);
+          top: 100%;
           left: 50%;
           transform: translateX(-50%);
+          padding-top: 24px;
+          z-index: 200;
+        }
+        .alg-caseinfo__menu {
           background: #fff;
           border: 1px solid #DDD9CE;
           border-radius: 10px;
           width: 230px;
           box-shadow: 0 12px 40px rgba(11,31,58,0.18);
-          overflow: hidden;
-          animation: dropIn 0.18s ease;
-          z-index: 200;
           padding: 8px;
+          animation: caseDropIn 0.18s ease;
         }
-        /* invisible hover bridge so the menu doesn't close crossing the gap */
-        .alg-caseinfo__menu::before {
-          content: '';
-          position: absolute;
-          top: -22px;
-          left: 0;
-          right: 0;
-          height: 22px;
+        @keyframes caseDropIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .alg-caseinfo__menu a {
           display: block;
@@ -337,13 +353,6 @@ export default function Header() {
         @keyframes dropIn {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
-        }
-        .alg-caseinfo__menu {
-          animation-name: dropInCentered;
-        }
-        @keyframes dropInCentered {
-          from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         .alg-profile__header {
           background: #0B1F3A;
@@ -436,8 +445,8 @@ export default function Header() {
             <div
               className={`alg-caseinfo ${showCaseInfo ? 'open' : ''}`}
               ref={caseInfoRef}
-              onMouseEnter={() => setShowCaseInfo(true)}
-              onMouseLeave={() => setShowCaseInfo(false)}
+              onMouseEnter={openCaseInfo}
+              onMouseLeave={scheduleCloseCaseInfo}
             >
               <button
                 type="button"
@@ -450,11 +459,13 @@ export default function Header() {
               </button>
 
               {showCaseInfo && (
-                <div className="alg-caseinfo__menu">
-                  <a href="/case-information">Case Information</a>
-                  <a href="/proof-of-claim">Proof of Claim</a>
-                  <a href="/useful-links">Useful Links</a>
-                  <a href="/professionals">Case Professionals</a>
+                <div className="alg-caseinfo__pop">
+                  <div className="alg-caseinfo__menu">
+                    <a href="/case-information">Case Information</a>
+                    <a href="/proof-of-claim">Proof of Claim</a>
+                    <a href="/useful-links">Useful Links</a>
+                    <a href="/professionals">Case Professionals</a>
+                  </div>
                 </div>
               )}
             </div>

@@ -24,16 +24,14 @@ function App() {
         <Route path="/request-access" element={<RequestAccess />} />
         <Route path="/set-password" element={<SetPassword />} />
 
-        {/* Public case information pages */}
-        <Route path="/case-information" element={<CaseInformation />} />
-        <Route path="/proof-of-claim" element={<ProofOfClaim />} />
-        <Route path="/useful-links" element={<UsefulLinks />} />
-        <Route path="/professionals" element={<CaseProfessionals />} />
-
         {/* Protected — requires login */}
         <Route path="/actions" element={<ProtectedRoute><Actions /></ProtectedRoute>} />
         <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+        <Route path="/case-information" element={<ProtectedRoute><CaseInformation /></ProtectedRoute>} />
+        <Route path="/proof-of-claim" element={<ProtectedRoute><ProofOfClaim /></ProtectedRoute>} />
+        <Route path="/useful-links" element={<ProtectedRoute><UsefulLinks /></ProtectedRoute>} />
+        <Route path="/professionals" element={<ProtectedRoute><CaseProfessionals /></ProtectedRoute>} />
 
         {/* Admin only */}
         <Route path="/admin" element={<AdminRoute><AdminPortal /></AdminRoute>} />

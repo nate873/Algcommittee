@@ -318,14 +318,14 @@ export default function Contact() {
         <Header />
 
         <header className="contact-hero">
-          <div className="contact-hero__badge">Credit Committee</div>
+          <div className="contact-hero__badge">Creditor Committee</div>
           <h1 className="contact-hero__title">
             Contact the<br />
             <span className="contact-hero__accent">Committee</span>
           </h1>
           <p className="contact-hero__subtitle">
             Submit a structured inquiry directly to the Allstate Lending Group
-            Credit Committee. We'll confirm receipt and respond within 3–5 business days.
+            Creditor Committee. We'll confirm receipt and respond within 3–5 business days.
           </p>
         </header>
 

@@ -99,7 +99,7 @@ export default function Footer() {
           <div>
             <div className="alg-footer__brand">
               <span className="alg-footer__logo">ALG</span>
-              <span className="alg-footer__brand-name">Credit Committee</span>
+              <span className="alg-footer__brand-name">Creditor Committee</span>
             </div>
             <p className="alg-footer__tagline">
               The official digital portal for Allstate Lending Group's

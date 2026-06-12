@@ -259,10 +259,10 @@ export default function FAQ() {
 
         {/* HERO */}
         <div className="faq-hero">
-          <div className="faq-hero__badge">Credit Committee</div>
+          <div className="faq-hero__badge">Creditor Committee</div>
           <h1 className="faq-hero__title">Frequently Asked Questions</h1>
           <p className="faq-hero__sub">
-            Find answers to common questions about the Credit Committee,
+            Find answers to common questions about the Creditor Committee,
             lending criteria, meeting records, and portal access.
           </p>
           <div className="faq-search-wrap">

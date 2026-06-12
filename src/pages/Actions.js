@@ -148,11 +148,11 @@ export default function Actions() {
         <Header />
 
         <div className="actions-hero">
-          <div className="actions-hero__badge">Credit Committee</div>
+          <div className="actions-hero__badge">Creditor Committee</div>
           <h1 className="actions-hero__title">Recent Committee Actions</h1>
           <p className="actions-hero__sub">
             A chronological log of formal decisions, policy updates, and resolutions
-            made by the Allstate Lending Group Credit Committee.
+            made by the Allstate Lending Group Creditor Committee.
           </p>
         </div>
 
